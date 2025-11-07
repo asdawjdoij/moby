@@ -19,7 +19,8 @@ const config = {
 			fallback: '404.html'
 		}),
 		prerender: {
-			handleHttpError: 'ignore' // or custom function
+			handleHttpError: 'ignore',
+			handleUnseenRoutes: 'ignore'
 		}
 		
 	},

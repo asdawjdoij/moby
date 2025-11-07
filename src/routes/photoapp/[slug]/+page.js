@@ -1,5 +1,3 @@
-// src/routes/devblog/[slug]/+page.js
-
 export const prerender = false;
 
 /** @type {import('./$types').PageLoad} */
