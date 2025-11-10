@@ -6,7 +6,8 @@
 	let { children } = $props();
 
 
-	let base = dev ? "" : "/moby"
+	import { base } from '$app/paths';
+
 </script>
 
 <svelte:head>
