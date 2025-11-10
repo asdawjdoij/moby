@@ -5,13 +5,15 @@ import { base } from '$app/paths';
 const allowedRoutes = ['/', '/photoapp', 'register', 'login'];
 
 export async function handle({ event, resolve }) {
-  if (dev) return resolve(event);
+	if (dev) return resolve(event);
 
-  const path = `${base}/${event.url.pathname}`;
+	const path = `${base}${event.url.pathname}`;
 
-  if (!allowedRoutes.includes(path)) {
-    throw redirect(302, '/');
-  }
+	const isAllowed = allowedRoutes.some((route) => path.startsWith(route));
 
-  return resolve(event);
+	if (!isAllowed) {
+		throw redirect(302, '/');
 	}
+
+	return resolve(event);
+}
