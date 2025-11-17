@@ -1,7 +1,10 @@
 import { error } from '@sveltejs/kit';
 
+export const ssr = false;
+export const prerender = false;
+
+/** @type {import('./$types').PageLoad} */
 export async function load({ params, fetch }) {
-	// @ts-ignore
 	const response = await fetch('https://pokeapi.co/api/v2/pokemon/' + params.slug);
 
 	if (!response.ok) {
