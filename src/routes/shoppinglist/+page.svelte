@@ -21,6 +21,15 @@
 			class="w-full p-2 rounded-lg mb-3 bg-white/20 text-white"
 		/>
 
+		<input
+			type="number"
+			bind:value={newPriority}
+			min="1"
+			max="10"
+			placeholder="Prioritet (1-10)"
+			class="w-full p-2 rounded-lg mb-3 bg-white/20 text-white"
+		/>
+
 		<button on:click={addItem}
 						class="bg-green-500 hover:bg-green-400 duration-300 w-full p-2 rounded-lg font-bold cursor-pointer">
 			Lägg till
@@ -32,7 +41,7 @@
 			<h2 class="text-2xl font-bold mb-3">Att köpa</h2>
 
 			<ul class="space-y-3">
-				{#each items.filter(i => !i.bought) as item}
+				{#each items.filter(i => !i.bought).sort((a,b) => a.priority - b.priority) as item}
 					<li class="grid grid-cols-[50px_1fr_100px] bg-black/25 p-3 rounded-xl items-center">
 						<button on:click={() => toggleBought(item)} class="text-2xl cursor-pointer">+</button>
 
@@ -53,7 +62,7 @@
 			<h2 class="text-2xl font-bold mb-3">Köpta</h2>
 
 			<ul class="space-y-3">
-				{#each items.filter(i => i.bought) as item}
+				{#each items.filter(i => i.bought).sort((a,b) => a.priority - b.priority) as item}
 					<li class="grid grid-cols-[50px_1fr_100px] bg-black/25 p-3 rounded-xl items-center">
 						<button on:click={() => toggleBought(item)} class="text-2xl cursor-pointer">-</button>
 
@@ -77,13 +86,15 @@
 	import FaShoppingCart from 'svelte-icons/fa/FaShoppingCart.svelte';
 
 	let items = [
-		{ name: 'Mjölk', category: 'Mejeri', bought: false },
-		{ name: 'Bananer', category: 'Frukt', bought: false },
-		{ name: 'Ägg', category: 'Mejeri', bought: true }
+		{ name: 'Mjölk', category: 'Mejeri', bought: false, priority: 2 },
+		{ name: 'Bananer', category: 'Frukt', bought: false, priority: 3 },
+		{ name: 'Ägg', category: 'Mejeri', bought: true, priority: 1 }
 	];
 
 	let newItem = '';
 	let newCategory = '';
+	let newPriority = 1;
+
 
 	function addItem() {
 		if (!newItem.trim()) return;
@@ -92,11 +103,13 @@
 			{
 				name: newItem,
 				category: newCategory || 'Okänd',
-				bought: false
+				bought: false,
+				priority: newPriority
 			}
 		];
 		newItem = '';
 		newCategory = '';
+		newPriority = 1;
 	}
 
 	function toggleBought(item) {

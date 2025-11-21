@@ -5,7 +5,7 @@
 			on:click={() => flip(card)}
 		>
 			<img class="front select-none" src={card.image} alt="front" />
-			<div class="back bg-sky-500 w-[100px] h-[100px]"></div>
+			<div class="back bg-stone-500 w-[100px] h-[100px]"></div>
 		</div>
 	{/each}
 </main>
@@ -19,6 +19,8 @@
 </aside>
 
 <aside class="turn" class:blue={blueTurn}></aside>
+
+<button on:click={resetGame}>Starta om</button>
 
 <style>
     main {
@@ -48,7 +50,6 @@
         height: 100%;
         backface-visibility: hidden;
         border-radius: 6px;
-        border: rgba(0, 0, 0, 10%) 3px solid;
         display: block;
     }
 
@@ -81,7 +82,7 @@
     }
 
     .blue {
-        background-color: blue;
+				background-color: #155dfc;
         left: 10px;
         right: auto;
     }
@@ -92,7 +93,7 @@
         position: fixed;
         bottom: 0;
         right: 0;
-        box-shadow: 0 0 10px 10px gold;
+        box-shadow: 0 0 10px 10px white;
         z-index: -1;
     }
 
@@ -183,6 +184,25 @@
 		items = items;
 
 
+	}
+
+	function resetGame() {
+		bluePoints = 0;
+		redPoints = 0;
+		blueTurn = true;
+		flipped = [];
+		locked = false;
+
+		let pairs = [];
+		for (let i = 0; i < 6; i++) {
+			const url = `https://picsum.photos/100?random=${i}`;
+			pairs.push(
+				{ id: crypto.randomUUID(), image: url, flipped: false, matched: false },
+				{ id: crypto.randomUUID(), image: url, flipped: false, matched: false }
+			);
+		}
+
+		items = pairs.sort(() => Math.random() - 0.5);
 	}
 
 </script>
