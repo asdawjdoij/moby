@@ -5,31 +5,59 @@
 			on:click={() => flip(card)}
 		>
 			<img class="front select-none" src={card.image} alt="front" />
-			<div class="back bg-stone-500 w-[100px] h-[100px]"></div>
+			<div class="back bg-black/[25%] w-[100px] h-[100px]"></div>
 		</div>
 	{/each}
 </main>
 
-<aside class="blue">
+<aside
+	class="blue"
+	class:rounded-tr-lg={blueTurn}
+>
 	<p>{bluePoints}</p>
 </aside>
 
-<aside class="red">
+<aside
+	class="red"
+	class:rounded-tl-lg={!blueTurn}
+>
 	<p>{redPoints}</p>
 </aside>
 
+
 <aside class="turn" class:blue={blueTurn}></aside>
 
-<button on:click={resetGame}>Starta om</button>
+<div class="bottom-[20px] fixed right-[50%] translate-x-[50%]">
+	<button class="text-white font-semibold cursor-pointer text-2xl bg-black/[25%] p-4 rounded-xl"
+					on:click={resetGame}>Starta om
+	</button>
+</div>
+
+{#if gameover}
+	<div class="flex justify-center">
+		<p class="bg-black/[25%] p-4 rounded-xl ">Winner {winner}</p>
+		</div>
+{/if}
 
 <style>
     main {
         display: grid;
-        grid-template-columns: repeat(4, 100px);
-        grid-template-rows: repeat(3, 100px);
         gap: 10px;
         justify-content: center;
         margin-top: 30px;
+    }
+
+    @media (min-height: 500px){
+        main{
+            grid-template-columns: repeat(4, 100px);
+            grid-template-rows: repeat(3, 100px);
+        }
+    }
+    @media (max-height: 500px){
+        main{
+            grid-template-columns: repeat(6, 100px);
+            grid-template-rows: repeat(2, 100px);
+        }
     }
 
     .card {
@@ -75,14 +103,14 @@
         position: fixed;
         bottom: 10px;
         right: 10px;
-        background-color: red;
+        background-color: #eb4034;
         display: flex;
         justify-content: center;
         align-items: center;
     }
 
     .blue {
-				background-color: #155dfc;
+        background-color: #34aeeb;
         left: 10px;
         right: auto;
     }
@@ -93,7 +121,7 @@
         position: fixed;
         bottom: 0;
         right: 0;
-        box-shadow: 0 0 10px 10px white;
+        box-shadow: 0 0 10px 10px rgba(255, 255, 255, 0.1);
         z-index: -1;
     }
 
@@ -103,6 +131,7 @@
     }
 
     p {
+        font-size: x-large;
         color: white;
         font-weight: bold;
     }
@@ -122,6 +151,9 @@
 
 	let flipped = [];
 	let locked = false;
+
+	let gameover = false;
+	let winner = "";
 
 	onMount(() => {
 		setInterval(() => {
@@ -160,10 +192,12 @@
 			if (first.image === second.image) {
 				items = items.map(c => c.image === first.image ? { ...c, matched: true } : c);
 
-				blueTurn ? bluePoints++ : redPoints++
+				blueTurn ? bluePoints++ : redPoints++;
 
-				flipped = []
-				locked = false
+				flipped = [];
+				locked = false;
+
+				check()
 			} else {
 				setTimeout(() => {
 					items = items.map(c =>
@@ -174,16 +208,28 @@
 								: c
 					);
 
-					flipped = []
-					locked = false
-					blueTurn = !blueTurn
-				}, 1000)
+					flipped = [];
+					locked = false;
+					blueTurn = !blueTurn;
+				}, 1000);
 			}
 		}
 
 		items = items;
 
 
+	}
+
+	function check() {
+		const allMatched = items.every(c => c.matched);
+
+		if (allMatched) {
+			gameover = true;
+
+			if (bluePoints > redPoints) winner = "Blue";
+			else if (redPoints > bluePoints) winner = "Red";
+			else winner = "Draw";
+		}
 	}
 
 	function resetGame() {
@@ -203,6 +249,9 @@
 		}
 
 		items = pairs.sort(() => Math.random() - 0.5);
+
+		winner = "";
+		gameover = false;
 	}
 
 </script>
