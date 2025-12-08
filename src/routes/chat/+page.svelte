@@ -9,7 +9,7 @@
 
 	let renderKey = 0;
 
-	let chat = writable([{ user: 'Eliza', message: eliza.getInitial() }]);
+	let chat = writable([{ user: 'Eliza', message: eliza.getInitial(), date: new Date().toUTCString() }]);
 
 	onMount(() => {
 		chat_store.update(saved => {
@@ -17,7 +17,7 @@
 				chat.set(saved);
 				return saved;
 			}
-			const initial = [{ user: 'Eliza', message: eliza.getInitial() }];
+			const initial = [{ user: 'Eliza', message: eliza.getInitial(), date: new Date().toUTCString() }];
 			chat.set(initial);
 			return initial;
 		});
@@ -25,7 +25,7 @@
 
 	async function write(message) {
 		chat.update(c => {
-			const updated = [...c, { user: 'You', message }];
+			const updated = [...c, { user: 'You', message: message, date: new Date().toUTCString() }];
 			chat_store.set(updated);
 			return updated;
 		});
@@ -36,7 +36,7 @@
 		await new Promise(r => setTimeout(r, 1000 + Math.random() * 1000));
 
 		chat.update(c => {
-			const updated = [...c, { user: 'Eliza', message: eliza.transform(message) }];
+			const updated = [...c, { user: 'Eliza', message: eliza.transform(message), date: new Date().toUTCString() }];
 			chat_store.set(updated);
 			return updated;
 		});
@@ -45,8 +45,8 @@
 	}
 
 	function reset() {
-		chat_store.reset();
 		renderKey += 1;
+		chat_store.reset();
 
 		const container = document.querySelector('section');
 		if (container) container.scrollTop = 0;
@@ -57,7 +57,7 @@
 
 </script>
 
-<main class="flex flex-col min-h-0 my-5">
+<main class="flex flex-col min-h-0 my-5 px-4">
 
 	<div class="bg-black/[25%] w-full max-w-xl mx-auto mb-5 rounded-xl p-3">
 		<p class="text-2xl text-white font-bold text-center rounded-xl">Chat</p>
@@ -67,8 +67,9 @@
 		<section
 			class="bg-black/[25%] w-full max-w-5xl mx-auto mb-5 rounded-xl p-3 flex flex-col gap-2 overflow-y-scroll h-[69vh]">
 			{#each $chat as message, i (i)}
-				<article class="{message.user === 'Eliza' ? 'eliza' : 'user'} p-4 bg-stone-700 text-white rounded-xl w-9/12">
+				<article class="{message.user === 'Eliza' ? 'eliza' : 'user'} p-4 flex justify-between bg-stone-700 text-white rounded-xl w-9/12">
 					<p>{message.message}</p>
+					<p class="text-white/[50%]">{message.date}</p>
 				</article>
 			{/each}
 

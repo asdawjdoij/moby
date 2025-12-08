@@ -10,7 +10,7 @@ function createChatStore() {
 		: [];
 
 	const { subscribe, set, update } = writable(
-		initial.length > 0 ? initial : [{ user: 'Eliza', message: eliza.getInitial() }]
+		initial.length > 0 ? initial : [{ user: 'Eliza', message: eliza.getInitial(), date: new Date().toUTCString() }],
 	);
 
 	if (browser) {
@@ -24,7 +24,7 @@ function createChatStore() {
 		set,
 		update,
 		reset: () =>
-			set([{ user: 'Eliza', message: eliza.getInitial() }])
+			set([{ user: 'Eliza', message: eliza.getInitial(), date: new Date().toUTCString() }],)
 	};
 }
 
