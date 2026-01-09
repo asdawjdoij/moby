@@ -1,8 +1,41 @@
+<script>
+	import { onMount } from 'svelte';
+
+	const STORAGE_KEY = 'recent-searches';
+	let searches = [];
+
+	onMount(() => {
+		const stored = sessionStorage.getItem(STORAGE_KEY);
+		if (stored) {
+			searches = JSON.parse(stored);
+		}
+	});
+
+	function clearData() {
+		sessionStorage.removeItem(STORAGE_KEY);
+		searches = [];
+	}
+</script>
+
 <div class="backdrop"></div>
 
+    <button on:click={clearData} class="bg-red-500 p-4 rounded-xl mx-4 my-4 fixed font-medium hover:bg-red-600 text-white duration-300 cursor-pointer">
+        Clear Data
+    </button>
 <main>
 	<slot />
 </main>
+
+<footer class="fixed bottom-0 w-full flex justify-center gap-4 bg-white/80 py-4">
+	{#each searches as search}
+		<a
+			class="pokemon-link"
+			href={`/search/${search}`}
+		>
+			{search.charAt(0).toUpperCase() + search.slice(1)}
+		</a>
+	{/each}
+</footer>
 
 <style>
 

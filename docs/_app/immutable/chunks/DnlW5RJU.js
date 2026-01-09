@@ -1,2 +1,0 @@
-import"./DsnmJJEf.js";import"./Bp-TK59q.js";import{f as o,b as a,aM as s}from"./C55T2Wxw.js";const l={title:"Hello World",date:"2025-04-01"},{title:m,date:p}=l;var r=o(`<h1>Hello 👋</h1> <p>Welcome to my first devblog post!
-Each post is written in MDX format, which allows you to use Svelte components inside your posts - such as this CodeBlock.</p> <br/> Each post needs to have a title and a date in the frontmatter, between the --- tags.`,1);function h(t){var e=r();s(5),a(t,e)}export{h as default,l as metadata};
