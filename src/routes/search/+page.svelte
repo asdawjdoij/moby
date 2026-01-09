@@ -1,5 +1,6 @@
 <script>
 	import { goto } from '$app/navigation';
+	import { base } from '$app/paths';
 
 	let search = '';
 	const STORAGE_KEY = 'recent-searches';
@@ -21,7 +22,7 @@
 
 		sessionStorage.setItem(STORAGE_KEY, JSON.stringify(searches));
 
-		goto('/search/' + normalized);
+		goto(`${base}/search/` + normalized);
 
 		search = '';
 	}

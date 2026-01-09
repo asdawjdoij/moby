@@ -1,5 +1,6 @@
 <script>
 	import { onMount } from 'svelte';
+    	import { base } from '$app/paths';
 
 	const STORAGE_KEY = 'recent-searches';
 	let searches = [];
@@ -30,7 +31,7 @@
 	{#each searches as search}
 		<a
 			class="pokemon-link"
-			href={`/search/${search}`}
+			href={`${base}/search/${search}`}
 		>
 			{search.charAt(0).toUpperCase() + search.slice(1)}
 		</a>
